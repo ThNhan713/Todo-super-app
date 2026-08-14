@@ -1,12 +1,11 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { getClientUser } from '@/lib/utils/clientAndUser'
 import { revalidatePath } from 'next/cache'
 import { rewardForTask } from '@/lib/logic/xp'
 
 export async function createTodo(formData: FormData) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { supabase, user } = await getClientUser();
     if (!user) return
 
     const title = formData.get('title') as string
@@ -32,8 +31,7 @@ export async function createTodo(formData: FormData) {
 }
 
 export async function completeTodo(id: string) {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { supabase, user } = await getClientUser();
     if (!user) return
 
     const { data: todo } = await supabase.from('todos').select('*').eq('id', id).single()
