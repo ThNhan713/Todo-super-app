@@ -27,7 +27,7 @@ export async function createTodo(formData: FormData) {
     const { xpReward, coinReward } = reward
 
     await supabase.from('todos').insert({ user_id: user.id, title, description, xp_reward: xpReward, coin_reward: coinReward, difficulty, time })
-    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/todos')
 }
 
 export async function completeTodo(id: string) {
